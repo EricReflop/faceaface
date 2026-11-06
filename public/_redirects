@@ -7,6 +7,8 @@
 /sitemap.xml                            /sitemap-index.xml             301
 /page-sitemap.xml                       /sitemap-index.xml             301
 /sitemap.rss                            /sitemap-index.xml             301
-/feed/                                  /actualites/                   301
+/feed/                                  /                              301
+/actualites/                            /                              301
+/actualites/*                           /                              301
 /wp-admin/*                             /                              301
 /wp-login.php                           /                              301

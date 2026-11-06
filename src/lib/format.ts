@@ -21,9 +21,6 @@ export const heure = (hhmm: string) => {
 
 export const prix = (n: number) => `${n} €`;
 
-export const dateLongue = (d: Date) =>
-  d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
-
 export const ordreJour = (j: Jour) => JOURS.indexOf(j);
 
 export const adresseComplete = (s: { adresse: string; codePostal: string; ville: string }) =>

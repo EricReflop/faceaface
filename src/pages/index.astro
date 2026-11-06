@@ -1,16 +1,10 @@
 ---
-import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import Planning from '../components/Planning.astro';
 import Salles from '../components/Salles.astro';
 import CtaEssai from '../components/CtaEssai.astro';
 import site from '../data/site.json';
 import { sportsClub } from '../lib/schema';
-import { dateLongue } from '../lib/format';
-
-const actus = (await getCollection('actus', ({ data }) => !data.brouillon))
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
-  .slice(0, 3);
 
 const jsonLd = [
   await sportsClub(),
@@ -59,30 +53,10 @@ const jsonLd = [
     </div>
   </section>
 
-  {actus.length > 0 && (
-    <section class="section section--alt" aria-labelledby="actus-titre">
-      <div class="container">
-        <h2 id="actus-titre">L’actu du club</h2>
-        <ul class="grid liste">
-          {actus.map((a) => (
-            <li class="card">
-              <h3><a href={`/actualites/${a.id}/`}>{a.data.titre}</a></h3>
-              <p><time datetime={a.data.date.toISOString()}>{dateLongue(a.data.date)}</time></p>
-              <p>{a.data.description}</p>
-            </li>
-          ))}
-        </ul>
-        <p><a href="/actualites/">Toutes les actualités</a></p>
-      </div>
-    </section>
-  )}
-
   <CtaEssai />
 </Base>
 
 <style>
   .hero { padding-block: var(--space-16); }
   .surtitre { text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; color: var(--color-on-inverse); }
-  .hero .lead { color: var(--color-on-inverse); }
-  .liste { list-style: none; padding: 0; }
-</style>
+  .hero .lead { color: var(--color-on-inverse); }</style>

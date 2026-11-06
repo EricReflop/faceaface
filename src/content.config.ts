@@ -65,14 +65,4 @@ const coachs = defineCollection({
   }),
 });
 
-const actus = defineCollection({
-  loader: glob({ pattern: '*.md', base: 'src/content/actus' }),
-  schema: z.object({
-    titre: z.string(),
-    description: z.string().max(160),
-    date: z.coerce.date(),
-    brouillon: z.boolean().default(false),
-  }),
-});
-
-export const collections = { salles, groupes, planning, tarifs, coachs, actus };
+export const collections = { salles, groupes, planning, tarifs, coachs };

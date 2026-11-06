@@ -14,7 +14,8 @@ Voir aussi le [README](README.md) (commandes, TODO du club) et l'[audit](audit/a
 ## Contenus : une seule source de vérité
 
 - `src/data/*.json` : planning, groupes, salles, tarifs, infos du club (`site.json`). Les schémas sont dans `src/content.config.ts`.
-- `src/content/coachs/*.md` et `src/content/actus/*.md`.
+- `src/content/coachs/*.md`.
+- **Pas de rubrique Actualités** (retirée à la demande du propriétaire) : `/actualites/` redirige en 301 vers l'accueil.
 - **Ne jamais dupliquer** une donnée (horaire, prix, adresse) en dur dans une page : la lire depuis la collection.
 - **Ne jamais inventer** de contenu (horaires, biographies, mentions légales, chiffres). Une information manquante devient un `<!-- TODO club : … -->` et une ligne dans la liste TODO du README.
 
