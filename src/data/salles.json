@@ -7,16 +7,7 @@
     "codePostal": "51100",
     "ville": "Reims",
     "principale": true,
-    "geo": null
-  },
-  {
-    "id": "saint-exupery",
-    "nom": "Gymnase Saint-Exupéry",
-    "nomCourt": "Saint-Exupéry",
-    "adresse": "22 rue Saint-Exupéry",
-    "codePostal": "51100",
-    "ville": "Reims",
-    "principale": false,
+    "ordre": 1,
     "geo": null
   },
   {
@@ -27,6 +18,18 @@
     "codePostal": "51100",
     "ville": "Reims",
     "principale": false,
+    "ordre": 2,
+    "geo": null
+  },
+  {
+    "id": "saint-exupery",
+    "nom": "Gymnase Saint-Exupéry",
+    "nomCourt": "Saint-Exupéry",
+    "adresse": "22 rue Saint-Exupéry",
+    "codePostal": "51100",
+    "ville": "Reims",
+    "principale": false,
+    "ordre": 3,
     "geo": null
   }
 ]

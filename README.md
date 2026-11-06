@@ -38,17 +38,14 @@ Le planning est saisi une seule fois. Il alimente l'accueil, la page Cours & hor
 
 ## Design system (Figma)
 
-Les styles actuels sont **provisoires**. `src/styles/tokens.css` contient des variables nommées pour être reliées une à une aux variables Figma (couleurs, typographie, espacements, rayons). Une fois les maquettes prêtes :
-
-1. Autoriser le connecteur Figma (`/mcp` dans Claude Code).
-2. Reprendre les variables Figma dans `tokens.css`.
-3. Mettre les composants (`src/components/`) aux maquettes.
+La page d'accueil, l'en-tête et le pied de page sont intégrés d'après la maquette Figma « Face à Face Website ». `src/styles/tokens.css` reprend les variables Figma (couleurs, polices Inter et Barlow Condensed, tailles, espacements). Les autres pages attendent leur maquette.
 
 ## À compléter par le club (TODO)
 
 - [ ] **Téléphone** dans `site.json` : il est absent du site actuel, alors qu'il compte pour le SEO local.
 - [ ] **Coordonnées GPS** des 3 salles dans `salles.json`, pour le JSON-LD et les itinéraires.
-- [ ] **Logo SVG**, image Open Graph (1200×630) et photos optimisées.
+- [ ] **Photos définitives** : celles de l'accueil sont provisoires (à remplacer dans `src/assets/photos/`, puis retirer la mention du pied de page).
+- [ ] Image Open Graph (1200×630).
 - [ ] Mentions légales : siège, numéro RNA, directeur de publication.
 - [ ] Politique de confidentialité : reprendre l'ancienne page et la mettre à jour.
 - [ ] Description de chaque groupe et équipement à prévoir pour un essai.

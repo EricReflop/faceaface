@@ -1,10 +1,58 @@
 ---
+/**
+ * Page d'accueil — maquette Figma « Face à Face Website »
+ * Desktop : node 13:2406 · Mobile : node 13:2641
+ */
+import { getCollection } from 'astro:content';
+import { Picture } from 'astro:assets';
 import Base from '../layouts/Base.astro';
-import Planning from '../components/Planning.astro';
-import Salles from '../components/Salles.astro';
-import CtaEssai from '../components/CtaEssai.astro';
 import site from '../data/site.json';
 import { sportsClub } from '../lib/schema';
+import { capitalize, lienItineraire, plagesParJour } from '../lib/format';
+
+import photoHero from '../assets/photos/hero-ring.jpg';
+import photoEnfants from '../assets/photos/public-enfants.jpg';
+import photoAdos from '../assets/photos/public-adolescents.jpg';
+import photoAdultes from '../assets/photos/public-adultes.jpg';
+import photoSalle from '../assets/photos/salle-ring.jpg';
+import flecheBlanche from '../assets/icons/arrow-up-right-blanc.svg';
+import flecheCharbon from '../assets/icons/arrow-up-right-charbon.svg';
+
+const salles = (await getCollection('salles')).sort((a, b) => a.data.ordre - b.data.ordre);
+const planning = await getCollection('planning');
+
+// Horaires par salle (créneaux ouverts aux nouveaux pratiquants : hors entraînement libre).
+const horaires = salles.map((s) => ({
+  salle: s,
+  jours: plagesParJour(
+    planning.filter((c) => c.data.salle.id === s.id && c.data.groupe.id !== 'libre').map((c) => c.data),
+  ),
+}));
+
+// Textes de la maquette Figma.
+const publics = [
+  {
+    surtitre: 'Découvrir',
+    titre: 'Enfant',
+    texte: 'Apprendre à bouger, à écouter et à respecter l’autre. Les premiers gestes, dans un esprit ludique.',
+    photo: photoEnfants,
+    alt: 'Un entraîneur guide un jeune enfant ganté pendant un exercice de boxe.',
+  },
+  {
+    surtitre: 'Prendre confiance',
+    titre: 'Adolescents',
+    texte: 'Canaliser son énergie, développer sa technique et grandir avec les valeurs du collectif.',
+    photo: photoAdos,
+    alt: 'Deux adolescents échangent des coups sur un ring d’entraînement.',
+  },
+  {
+    surtitre: 'Se dépasser',
+    titre: 'Adultes',
+    texte: 'Débuter ou retrouver le ring. Travailler sa condition physique et progresser à son rythme.',
+    photo: photoAdultes,
+    alt: 'Une pratiquante frappe dans un sac de frappe dans une salle de boxe.',
+  },
+];
 
 const jsonLd = [
   await sportsClub(),
@@ -17,46 +65,244 @@ const jsonLd = [
   description="Club de Muay Thaï à Reims depuis plus de 20 ans : cours de boxe thaï enfants dès 5 ans, ados et adultes, débutants et confirmés. Essai gratuit dans 3 gymnases."
   jsonLd={jsonLd}
 >
-  <section class="hero section section--inverse" aria-labelledby="hero-titre">
-    <div class="container">
-      <p class="surtitre">Club de Muay Thaï · Reims</p>
-      <h1 id="hero-titre">Boxe thaï à Reims, dès 5 ans</h1>
-      <p class="lead">Enfants, ados et adultes, débutants ou confirmés : 3 gymnases, des coachs diplômés et champions, plus de 120 titres en 20 ans.</p>
-      <div class="actions">
-        <a class="btn" href="/cours-essai/">Essayer gratuitement</a>
-        <a class="btn btn--secondary" href="#horaires">Voir les horaires</a>
+  <!-- Hero -->
+  <section class="hero" aria-labelledby="hero-titre">
+    <div class="hero__promesse">
+      <p class="repere">Face à Face / Boxe thaïlandaise</p>
+      <h1 id="hero-titre" class="hero__titre">La force<br /> d’avancer.<br /> Ensemble.</h1>
+      <p class="hero__texte">Découvrir la boxe thaïlandaise, prendre confiance et progresser. Chez Face à Face, chacun trouve sa place, du premier geste au prochain défi.</p>
+      <a class="btn hero__cta" href="/cours-essai/">
+        Réserver un essai gratuit
+        <img src={flecheBlanche.src} width="20" height="20" alt="" />
+      </a>
+      <p class="hero__valeurs">Respect. Discipline. Dépassement de soi.</p>
+    </div>
+    <figure class="hero__photo">
+      <Picture
+        src={photoHero}
+        formats={['avif', 'webp']}
+        widths={[480, 800, 1152]}
+        sizes="(min-width: 64rem) 56vw, 100vw"
+        alt="Deux boxeurs à l’entraînement sur un ring : l’un frappe du pied dans les paos tenus par son partenaire."
+        loading="eager"
+        fetchpriority="high"
+      />
+      <figcaption class="legende"><span class="accent"></span>Le respect avant l’impact.</figcaption>
+    </figure>
+  </section>
+
+  <!-- Du sport pour tous -->
+  <section class="publics" aria-labelledby="publics-titre">
+    <div class="wrap">
+      <p class="repere">Le club, ouvert à chacun</p>
+      <div class="publics__intro">
+        <h2 id="publics-titre" class="titre-section">Du sport pour tous.</h2>
+        <p>Un même esprit, des parcours différents. La boxe thaïlandaise se découvre à tout âge.</p>
       </div>
-      <!-- Visuel hero (image AVIF optimisée, fetchpriority="high") à intégrer selon la maquette Figma -->
+      <ul class="publics__liste">
+        {publics.map((p) => (
+          <li class="public">
+            <Picture
+              src={p.photo}
+              formats={['avif', 'webp']}
+              widths={[400, 640, 900]}
+              sizes="(min-width: 64rem) 30vw, 100vw"
+              alt={p.alt}
+              class="public__photo"
+            />
+            <div class="public__texte">
+              <p class="public__surtitre">{p.surtitre}</p>
+              <h3 class="public__titre">
+                <a href="/cours-horaires/">
+                  {p.titre}
+                  <span class="visually-hidden"> : voir les horaires</span>
+                  <img src={flecheCharbon.src} width="20" height="20" alt="" />
+                </a>
+              </h3>
+              <p>{p.texte}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
     </div>
   </section>
 
-  <section id="horaires" class="section" aria-labelledby="planning-titre">
-    <div class="container">
-      <h2 id="planning-titre">Les entraînements</h2>
-      <p class="lead">Horaires {site.periodeSaison}. Filtrez par groupe ou par salle.</p>
-      <Planning titreId="planning-titre" />
+  <!-- Les salles -->
+  <section class="salles" aria-labelledby="salles-titre">
+    <div class="wrap salles__grille">
+      <figure class="salles__photo">
+        <Picture
+          src={photoSalle}
+          formats={['avif', 'webp']}
+          widths={[480, 800, 1200]}
+          sizes="(min-width: 64rem) 45vw, 100vw"
+          alt="Un ring de boxe dans une grande salle d’entraînement lumineuse."
+        />
+        <figcaption class="salles__legende">Un cadre pour progresser.</figcaption>
+      </figure>
+      <div class="salles__contenu">
+        <p class="repere">Les lieux d’entraînement</p>
+        <h2 id="salles-titre" class="titre-section titre-section--salles">Les salles.</h2>
+        <p>Trois salles pour se retrouver autour d’une même passion. Choisissez votre lieu d’entraînement.</p>
+        <ol class="salles__liste">
+          {salles.map((s, i) => (
+            <li>
+              <a href={lienItineraire(s.data)} rel="noopener">
+                <span class="salles__numero" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+                <span class="salles__nom">{s.data.nomCourt}</span>
+                <span class="visually-hidden"> : itinéraire</span>
+                <img src={flecheBlanche.src} width="20" height="20" alt="" />
+              </a>
+            </li>
+          ))}
+        </ol>
+      </div>
     </div>
   </section>
 
-  <section class="section section--alt" aria-labelledby="salles-titre">
-    <div class="container">
-      <h2 id="salles-titre">Nos salles</h2>
-      <Salles />
+  <!-- Envie d'essayer + horaires -->
+  <section class="essai" aria-labelledby="essai-titre">
+    <div class="wrap essai__grille">
+      <div class="essai__invitation">
+        <p class="repere">Le premier pas, c’est vous</p>
+        <h2 id="essai-titre" class="titre-essai">Envie<br /> d’essayer&nbsp;?</h2>
+        <p>Venez découvrir la boxe thaïlandaise et l’esprit Face à Face lors d’un essai gratuit. Pas besoin d’avoir déjà boxé : l’envie suffit.</p>
+        <a class="btn essai__cta" href="/cours-essai/">
+          Réserver un essai gratuit
+          <img src={flecheBlanche.src} width="20" height="20" alt="" />
+        </a>
+      </div>
+
+      <div class="horaires">
+        <div class="horaires__entete">
+          <h3>Les horaires</h3>
+          <span class="accent accent--large"></span>
+        </div>
+        <table>
+          <caption class="visually-hidden">Jours et créneaux des cours par salle, saison {site.saison}</caption>
+          <thead>
+            <tr><th scope="col">Salle</th><th scope="col">Jours / créneaux</th></tr>
+          </thead>
+          <tbody>
+            {horaires.map(({ salle, jours }) => (
+              <tr>
+                <th scope="row">{salle.data.nomCourt}</th>
+                <td>
+                  <ul>
+                    {jours.map((j) => (
+                      <li><span class="jour">{capitalize(j.jour)}</span> {j.plages.join(', ')}</li>
+                    ))}
+                  </ul>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <a class="horaires__lien" href="/cours-horaires/">Voir le planning détaillé par groupe</a>
+      </div>
     </div>
   </section>
-
-  <section class="section" aria-labelledby="club-titre">
-    <div class="container prose">
-      <h2 id="club-titre">Plus qu’un sport, une philosophie</h2>
-      <p>{site.valeurs.join(', ')} : les valeurs du Muay Thaï guident chaque entraînement chez Face à Face. Le club réunit près de 200 pratiquants encadrés par Jean-Marc Guillot (diplômé d’État) et Zohir Remidi (champion de France professionnel).</p>
-      <p><a href="/le-club/">Découvrir le club et ses coachs</a></p>
-    </div>
-  </section>
-
-  <CtaEssai />
 </Base>
 
 <style>
-  .hero { padding-block: var(--space-16); }
-  .surtitre { text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; color: var(--color-on-inverse); }
-  .hero .lead { color: var(--color-on-inverse); }</style>
+  /* ── Typographies de titres (Figma : Titres/…) ─────── */
+  .hero__titre, .titre-section, .titre-essai { font-family: var(--famille-titres); font-weight: 700; text-transform: uppercase; margin: 0; }
+  .titre-section { font-size: var(--titre-section); line-height: 1; }
+  .titre-section--salles { font-size: var(--titre-section-salles); }
+  .titre-essai { font-size: var(--titre-essai); line-height: 0.98; }
+  figure { margin: 0; }
+  .accent--large { width: 36px; }
+
+  /* ── Hero ──────────────────────────────────────────── */
+  .hero { display: grid; background: var(--fond-marque-charbon); color: var(--texte-marque-blanc); }
+  .hero__promesse { display: flex; flex-direction: column; align-items: flex-start; gap: var(--espacement-28); padding: 44px var(--marge-page) var(--espacement-40); }
+  .hero__titre { font-size: var(--titre-hero); line-height: 0.94; letter-spacing: -0.8px; }
+  .hero__texte { max-width: 440px; margin: 0; font-size: var(--taille-15); line-height: 1.6; }
+  .hero__cta { width: 100%; }
+  .hero__valeurs { margin: 0; font-size: var(--taille-10); font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; }
+  .hero__photo { position: relative; height: 350px; }
+  .hero__photo :global(picture), .salles__photo :global(picture) { display: block; height: 100%; }
+  .hero__photo :global(img), .salles__photo :global(img) { width: 100%; height: 100%; object-fit: cover; }
+  .legende {
+    position: absolute; left: var(--espacement-24); bottom: var(--espacement-24);
+    display: flex; align-items: center; gap: var(--espacement-10); padding: var(--espacement-8);
+    background: var(--fond-marque-charbon); color: var(--texte-marque-blanc);
+    font-size: var(--taille-10); font-weight: 700; letter-spacing: 1.7px; line-height: 1.2; text-transform: uppercase;
+  }
+
+  /* ── Du sport pour tous ────────────────────────────── */
+  .publics { background: var(--fond-marque-blanc); color: var(--texte-marque-charbon); padding-block: var(--section-y); }
+  .publics .wrap { display: flex; flex-direction: column; gap: var(--espacement-36); }
+  .publics__intro { display: flex; flex-direction: column; gap: var(--espacement-18); }
+  .publics__intro p { margin: 0; font-size: var(--taille-14); line-height: 1.6; }
+  .publics__liste { display: grid; gap: var(--espacement-36); list-style: none; margin: 0; padding: 0; }
+  .public :global(.public__photo) { display: block; width: 100%; height: 250px; object-fit: cover; }
+  .public__texte { display: flex; flex-direction: column; gap: var(--espacement-14); padding: var(--espacement-24) 0 var(--espacement-8); }
+  .public__texte p { margin: 0; font-size: var(--taille-14); line-height: 1.6; }
+  .public__surtitre { color: var(--texte-marque-rouge); font-size: var(--taille-10) !important; font-weight: 700; letter-spacing: 1.5px; line-height: 1.2 !important; text-transform: uppercase; }
+  .public__titre { margin: 0; font-size: var(--taille-36); font-weight: 600; line-height: 1.2; }
+  .public__titre a { display: flex; align-items: center; justify-content: space-between; min-height: var(--tap); color: var(--texte-marque-charbon); text-decoration: none; }
+  .public__titre a:hover { text-decoration: underline; text-underline-offset: 0.12em; }
+  /* Toute la carte est cliquable via le lien du titre */
+  .public { position: relative; }
+  .public__titre a::after { content: ''; position: absolute; inset: 0; }
+
+  /* ── Les salles ────────────────────────────────────── */
+  .salles { background: var(--fond-marque-charbon); color: var(--texte-marque-blanc); padding-block: var(--section-y); }
+  .salles__grille { display: flex; flex-direction: column-reverse; gap: var(--espacement-36); }
+  .salles__photo { position: relative; height: 300px; }
+  .salles__legende { position: absolute; left: var(--espacement-24); bottom: var(--espacement-24); font-size: var(--taille-10); font-weight: 600; letter-spacing: 1.6px; text-transform: uppercase; }
+  .salles__contenu { display: flex; flex-direction: column; gap: var(--espacement-24); }
+  .salles__contenu > p:not(.repere) { margin: 0; font-size: var(--taille-14); line-height: 1.6; }
+  .salles__liste { list-style: none; margin: 0; padding: 0; border-bottom: 1px solid rgb(255 255 255 / 0.2); }
+  .salles__liste li { border-top: 1px solid rgb(255 255 255 / 0.2); }
+  .salles__liste a { display: flex; align-items: center; gap: var(--espacement-20); padding-block: var(--espacement-20); color: var(--texte-marque-blanc); text-decoration: none; }
+  .salles__liste a:hover .salles__nom { text-decoration: underline; text-underline-offset: 0.12em; }
+  /* Numérotation décorative (aria-hidden, l’ordre est porté par <ol>) : rouge de marque Figma conservé */
+  .salles__numero { color: var(--fond-marque-rouge); font-size: var(--taille-11); font-weight: 600; }
+  .salles__nom { flex: 1; font-family: var(--famille-titres); font-size: var(--titre-salle); font-weight: 500; line-height: 1.2; }
+
+  /* ── Envie d'essayer + horaires ────────────────────── */
+  .essai { background: var(--fond-marque-blanc); color: var(--texte-marque-charbon); padding-block: var(--section-y); }
+  .essai__grille { display: flex; flex-direction: column; gap: 52px; }
+  .essai__invitation { display: flex; flex-direction: column; align-items: flex-start; gap: var(--espacement-26); }
+  .essai__invitation > p:not(.repere) { max-width: 440px; margin: 0; font-size: var(--taille-15); line-height: 1.65; }
+  .essai__cta { width: 100%; }
+  .horaires { display: flex; flex-direction: column; gap: var(--espacement-24); }
+  .horaires__entete { display: flex; align-items: center; justify-content: space-between; }
+  .horaires__entete h3 { margin: 0; font-size: var(--taille-32); font-weight: 600; line-height: 1.2; text-transform: uppercase; }
+  .horaires table { width: 100%; border-collapse: collapse; }
+  .horaires thead th { padding: 0 0 var(--espacement-14); font-size: var(--taille-10); font-weight: 700; letter-spacing: 1px; text-align: left; text-transform: uppercase; }
+  .horaires thead th:last-child { width: 55%; }
+  .horaires tbody tr { border-top: 1px solid rgb(34 34 34 / 0.2); }
+  .horaires tbody tr:last-child { border-bottom: 1px solid rgb(34 34 34 / 0.2); }
+  .horaires tbody th { padding: var(--espacement-18) var(--espacement-12) var(--espacement-18) 0; font-size: var(--taille-13); font-weight: 600; text-align: left; vertical-align: top; }
+  .horaires td { padding-block: var(--espacement-18); font-size: var(--taille-12); line-height: 1.4; }
+  .horaires td ul { display: flex; flex-direction: column; gap: var(--espacement-6); list-style: none; margin: 0; padding: 0; }
+  .jour { font-weight: 600; }
+  .horaires__lien { align-self: flex-start; display: inline-flex; align-items: center; min-height: var(--tap); color: var(--texte-marque-rouge); font-size: var(--taille-14); font-weight: 700; }
+
+  /* ── Desktop (maquette 1440px) ─────────────────────── */
+  @media (min-width: 64rem) {
+    .hero { grid-template-columns: minmax(0, 640fr) minmax(0, 800fr); min-height: 676px; }
+    .hero__promesse { padding: 58px var(--espacement-40) var(--espacement-40) var(--marge-page); }
+    .hero__titre { letter-spacing: -1.5px; }
+    .hero__texte { font-size: var(--taille-16); }
+    .hero__cta, .essai__cta { width: auto; }
+    .hero__photo { height: auto; }
+
+    .publics__intro { flex-direction: row; align-items: flex-end; justify-content: space-between; gap: var(--espacement-24); }
+    .publics__intro p { width: 365px; }
+    .publics__liste { grid-template-columns: repeat(3, 1fr); gap: var(--espacement-24); }
+    .public :global(.public__photo) { height: 290px; }
+
+    .salles__grille { flex-direction: row; align-items: center; gap: 72px; }
+    .salles__photo { flex: 0 0 min(620px, 50%); height: 460px; }
+    .salles__contenu { flex: 1; }
+
+    .essai { padding-block: var(--espacement-96); }
+    .essai__grille { flex-direction: row; align-items: center; gap: clamp(var(--espacement-48), 7vw, 112px); }
+    .essai__invitation { flex: 0 0 min(560px, 45%); }
+    .horaires { flex: 1; }
+  }
+</style>

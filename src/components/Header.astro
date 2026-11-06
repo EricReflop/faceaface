@@ -1,46 +1,45 @@
 ---
-import site from '../data/site.json';
+import logo from '../assets/logo.svg';
+import iconeFermer from '../assets/icons/x.svg';
+import Reseaux from './Reseaux.astro';
+import { menuPrincipal, estActif } from '../lib/navigation';
 
-const liens = [
-  { href: '/cours-horaires/', label: 'Cours & horaires' },
-  { href: '/cours-essai/', label: 'Essai gratuit' },
-  { href: '/inscription/', label: 'Inscription & tarifs' },
-  { href: '/le-club/', label: 'Le club' },
-  { href: '/le-muay-thai/', label: 'Le Muay Thaï' },
-  { href: '/contact/', label: 'Contact' },
-];
 const path = Astro.url.pathname;
-const actif = (href: string) => path === href || path.startsWith(href);
 ---
 <header class="site-header">
-  <div class="container bar">
-    <a class="logo" href="/" aria-label={`${site.nom}, accueil`}>
-      <!-- Remplacer par le logo SVG final -->
-      <span aria-hidden="true">FACE <b>À</b> FACE</span>
+  <div class="wrap barre">
+    <a class="logo" href="/">
+      <img src={logo.src} width="138" height="84" alt="Face à Face, accueil" />
     </a>
+
     <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="menu-principal">
-      <span class="visually-hidden">Ouvrir le menu</span>
-      <svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2"></path></svg>
+      <span>Menu</span>
+      <svg class="icone-ouvrir" aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path d="M3.333 5.833h13.334M3.333 10h13.334M3.333 14.167h13.334" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path>
+      </svg>
+      <img class="icone-fermer" src={iconeFermer.src} width="20" height="20" alt="" />
     </button>
-    <nav id="menu-principal" aria-label="Navigation principale">
-      <ul>
-        {liens.map((l) => (
-          <li><a href={l.href} aria-current={actif(l.href) ? 'page' : undefined}>{l.label}</a></li>
-        ))}
-      </ul>
-    </nav>
+
+    <div id="menu-principal" class="menu">
+      <nav aria-label="Navigation principale">
+        <ul class="liens">
+          {menuPrincipal.map((l) => (
+            <li><a href={l.href} aria-current={estActif(path, l.href) ? 'page' : undefined}>{l.label}</a></li>
+          ))}
+        </ul>
+      </nav>
+      <Reseaux />
+    </div>
   </div>
 </header>
 
 <script>
   const btn = document.querySelector<HTMLButtonElement>('.menu-toggle');
-  const nav = document.getElementById('menu-principal');
-  const label = btn?.querySelector('.visually-hidden');
+  const menu = document.getElementById('menu-principal');
   btn?.addEventListener('click', () => {
-    const open = btn.getAttribute('aria-expanded') === 'true';
-    btn.setAttribute('aria-expanded', String(!open));
-    if (label) label.textContent = open ? 'Ouvrir le menu' : 'Fermer le menu';
-    nav?.classList.toggle('is-open', !open);
+    const ouvert = btn.getAttribute('aria-expanded') === 'true';
+    btn.setAttribute('aria-expanded', String(!ouvert));
+    menu?.classList.toggle('is-open', !ouvert);
   });
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && btn?.getAttribute('aria-expanded') === 'true') {
@@ -51,19 +50,43 @@ const actif = (href: string) => path === href || path.startsWith(href);
 </script>
 
 <style>
-  .site-header { position: sticky; top: 0; z-index: 50; background: var(--color-surface-inverse); color: var(--color-on-inverse); }
-  .bar { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); min-height: 4rem; }
-  .logo { color: inherit; text-decoration: none; font-family: var(--font-display); font-size: var(--text-xl); letter-spacing: 0.04em; }
-  .logo b { color: var(--color-brand); font-weight: 400; background: var(--color-on-inverse); padding-inline: 0.15em; }
-  .menu-toggle { display: inline-grid; place-items: center; width: var(--tap); height: var(--tap); background: none; border: 0; color: inherit; cursor: pointer; }
-  nav { display: none; position: absolute; inset: 100% 0 auto; background: var(--color-surface-inverse); padding: var(--space-4); }
-  nav.is-open { display: block; }
-  ul { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-1); }
-  nav a { display: flex; align-items: center; min-height: var(--tap); padding-inline: var(--space-2); color: var(--color-on-inverse); text-decoration: none; font-weight: 600; }
-  nav a:hover, nav a[aria-current='page'] { text-decoration: underline; text-decoration-color: var(--color-brand); text-decoration-thickness: 3px; }
+  .site-header { background: var(--fond-marque-charbon); color: var(--texte-marque-blanc); }
+  .barre { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; min-height: 92px; }
+  .logo { display: block; }
+  .logo img { width: 112px; height: auto; }
+
+  /* Bouton du menu compact (Figma : Commande du menu) */
+  .menu-toggle {
+    display: inline-flex; align-items: center; gap: var(--espacement-10);
+    min-height: var(--tap); padding: 0; background: none; border: 0; color: inherit; cursor: pointer;
+    font: 600 var(--taille-12) / 1 var(--famille-texte);
+  }
+  .icone-fermer, [aria-expanded='true'] .icone-ouvrir { display: none; }
+  [aria-expanded='true'] .icone-fermer { display: block; }
+
+  /* Menu compact déplié : liens sur 2 colonnes + réseaux */
+  /* Sans JavaScript, le menu reste visible ; avec JS il est replié par défaut. */
+  .menu { display: flex; width: 100%; flex-direction: column; gap: var(--espacement-22); padding: var(--espacement-12) 0 var(--espacement-24); }
+  :global(html.js) .menu:not(.is-open) { display: none; }
+  :global(html:not(.js)) .menu-toggle { display: none; }
+  .liens { display: grid; grid-template-columns: 1fr 1fr; column-gap: var(--espacement-14); list-style: none; margin: 0; padding: 0; }
+  .liens a {
+    display: flex; align-items: center; min-height: var(--tap);
+    color: var(--texte-marque-blanc); text-decoration: none;
+    font: 600 var(--taille-12) / 1 var(--famille-texte);
+  }
+  .liens a[aria-current='page'] { text-decoration: underline; text-underline-position: from-font; }
+  .liens a:hover { text-decoration: underline; }
+  .menu :global(.reseaux) { margin-left: -6px; }
+
   @media (min-width: 64rem) {
+    .barre { flex-wrap: nowrap; min-height: 112px; }
+    .logo img { width: 138px; }
     .menu-toggle { display: none; }
-    nav { display: block; position: static; padding: 0; background: none; }
-    ul { display: flex; gap: var(--space-4); }
+    .menu, :global(html.js) .menu:not(.is-open) { display: contents; }
+    .liens { display: flex; gap: var(--espacement-24); }
+    .liens a { min-height: 32px; font-weight: 500; white-space: nowrap; }
+    .liens a[aria-current='page'] { font-weight: 700; }
+    .menu :global(.reseaux) { margin: 0 -6px 0 0; }
   }
 </style>

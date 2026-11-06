@@ -5,7 +5,7 @@ import { adresseComplete, lienItineraire } from '../lib/format';
 interface Props { niveauTitre?: 'h2' | 'h3' }
 const { niveauTitre = 'h3' } = Astro.props;
 const Titre = niveauTitre;
-const salles = await getCollection('salles');
+const salles = (await getCollection('salles')).sort((a, b) => a.data.ordre - b.data.ordre);
 ---
 <ul class="grid salles">
   {salles.map((s) => (

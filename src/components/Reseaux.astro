@@ -1,0 +1,23 @@
+---
+import site from '../data/site.json';
+import instagram from '../assets/icons/instagram.svg';
+import facebook from '../assets/icons/facebook.svg';
+---
+<ul class="reseaux">
+  <li>
+    <a href={site.reseaux.instagram} rel="noopener">
+      <img src={instagram.src} width="20" height="20" alt="Instagram de Face à Face" />
+    </a>
+  </li>
+  <li>
+    <a href={site.reseaux.facebook} rel="noopener">
+      <img src={facebook.src} width="20" height="20" alt="Facebook de Face à Face" />
+    </a>
+  </li>
+</ul>
+
+<style>
+  .reseaux { display: flex; align-items: center; gap: calc(var(--espacement-18) - 12px); list-style: none; margin: 0; padding: 0; }
+  /* Icône 20px dans une zone cliquable de 32px (WCAG 2.5.8) */
+  a { display: grid; place-items: center; width: 32px; height: 32px; }
+</style>

@@ -10,7 +10,7 @@ interface Props { filtres?: boolean; titreId?: string }
 const { filtres = true, titreId = 'planning-titre' } = Astro.props;
 
 const groupes = (await getCollection('groupes')).sort((a, b) => a.data.ordre - b.data.ordre);
-const salles = await getCollection('salles');
+const salles = (await getCollection('salles')).sort((a, b) => a.data.ordre - b.data.ordre);
 const creneaux = await getCollection('planning');
 
 const lignes = await Promise.all(

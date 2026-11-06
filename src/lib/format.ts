@@ -23,6 +23,28 @@ export const prix = (n: number) => `${n} €`;
 
 export const ordreJour = (j: Jour) => JOURS.indexOf(j);
 
+/**
+ * Regroupe des créneaux par jour et fusionne ceux qui se touchent.
+ * Ex. lundi 18:30–20:00 + 20:00–21:45 → « 18 h 30 – 21 h 45 ».
+ */
+export function plagesParJour(creneaux: { jour: Jour; debut: string; fin: string }[]) {
+  const parJour = new Map<Jour, { debut: string; fin: string }[]>();
+  for (const c of [...creneaux].sort((a, b) => ordreJour(a.jour) - ordreJour(b.jour) || a.debut.localeCompare(b.debut))) {
+    const plages = parJour.get(c.jour) ?? [];
+    const derniere = plages.at(-1);
+    if (derniere && c.debut <= derniere.fin) {
+      if (c.fin > derniere.fin) derniere.fin = c.fin;
+    } else {
+      plages.push({ debut: c.debut, fin: c.fin });
+    }
+    parJour.set(c.jour, plages);
+  }
+  return [...parJour].map(([jour, plages]) => ({
+    jour,
+    plages: plages.map((p) => `${heure(p.debut)} – ${heure(p.fin)}`),
+  }));
+}
+
 export const adresseComplete = (s: { adresse: string; codePostal: string; ville: string }) =>
   `${s.adresse}, ${s.codePostal} ${s.ville}`;
 

@@ -1,45 +1,122 @@
 /*
- * Design tokens — PROVISOIRES.
- * À remplacer par les variables du design system Figma (couleurs, typo, espacements).
- * Les noms sont pensés pour être mappés 1:1 sur des variables Figma.
+ * Design tokens — repris des variables Figma « Face à Face Website ».
+ * Nommage : variable Figma `groupe/nom` → `--groupe-nom`.
+ * Les tailles de texte sont converties en rem (1rem = 16px) pour respecter le zoom navigateur.
  */
 :root {
-  /* Couleurs — rouge accessible : #D00000 = 5,7:1 sur blanc (AA texte courant) */
-  --color-brand: #d00000;
-  --color-brand-strong: #a30000;
-  --color-ink: #1e232b;
-  --color-ink-muted: #4a515c;
-  --color-surface: #ffffff;
-  --color-surface-alt: #f4f4f5;
-  --color-surface-inverse: #14171c;
-  --color-on-inverse: #ffffff;
-  --color-on-brand: #ffffff;
-  --color-border: #d9dbe0;
+  /* ── Couleurs (Figma) ─────────────────────────────── */
+  --fond-marque-charbon: #222222;
+  --fond-marque-blanc: #ffffff;
+  --fond-marque-rouge: #ff0000;        /* accents décoratifs uniquement (traits, bordures) */
+  --texte-marque-charbon: #222222;
+  --texte-marque-blanc: #ffffff;
+  --bordure-marque-rouge: #ff0000;
+  --bordure-marque-charbon: #222222;
+  --bordure-marque-blanc: #ffffff;
+  --graphisme-marque-blanc: #ffffff;
+  --graphisme-marque-rouge: #ff0000;
+  --graphisme-neutres-niveau-000: #000000;
+
+  /*
+   * Écart volontaire avec Figma (décision du 06/11/2026) :
+   * #FF0000 ne fait que 4,0:1 avec le blanc. Pour le texte rouge et le fond des boutons
+   * (texte blanc), on utilise #D00000 (5,7:1) pour atteindre le niveau AA.
+   */
+  --texte-marque-rouge: #d00000;
+  --fond-action: #d00000;
+  --fond-action-survol: #a30000;
+
+  /* ── Typographie (Figma) ──────────────────────────── */
+  --famille-texte: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --famille-titres: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+
+  --taille-10: 0.625rem;
+  --taille-11: 0.6875rem;
+  --taille-12: 0.75rem;
+  --taille-13: 0.8125rem;
+  --taille-14: 0.875rem;
+  --taille-15: 0.9375rem;
+  --taille-16: 1rem;
+  --taille-28: 1.75rem;
+  --taille-32: 2rem;
+  --taille-36: 2.25rem;
+  --taille-46: 2.875rem;
+  --taille-48: 3rem;
+  --taille-56: 3.5rem;
+  --taille-64: 4rem;
+  --taille-66: 4.125rem;
+  --taille-76: 4.75rem;
+  --taille-104: 6.5rem;
+
+  /* Tailles fluides entre maquette mobile (375px) et desktop (1440px) */
+  --titre-hero: clamp(var(--taille-66), 2.8rem + 5.3vw, var(--taille-104));
+  --titre-section: clamp(var(--taille-46), 2.5rem + 2.3vw, var(--taille-64));
+  --titre-section-salles: clamp(var(--taille-48), 2.6rem + 2.1vw, var(--taille-64));
+  --titre-essai: clamp(var(--taille-56), 3rem + 1.9vw, var(--taille-76));
+  --titre-salle: clamp(var(--taille-28), 1.6rem + 0.4vw, var(--taille-32));
+
+  /* ── Espacements (Figma, px) ──────────────────────── */
+  --espacement-4: 4px;
+  --espacement-6: 6px;
+  --espacement-8: 8px;
+  --espacement-10: 10px;
+  --espacement-12: 12px;
+  --espacement-14: 14px;
+  --espacement-16: 16px;
+  --espacement-18: 18px;
+  --espacement-20: 20px;
+  --espacement-22: 22px;
+  --espacement-24: 24px;
+  --espacement-26: 26px;
+  --espacement-28: 28px;
+  --espacement-36: 36px;
+  --espacement-40: 40px;
+  --espacement-48: 48px;
+  --espacement-64: 64px;
+  --espacement-88: 88px;
+  --espacement-96: 96px;
+
+  /* Marges de page : 24px (mobile) → 64px (desktop) */
+  --marge-page: clamp(var(--espacement-24), 4.5vw, var(--espacement-64));
+  --section-y: clamp(var(--espacement-64), 6vw, var(--espacement-88));
+  --largeur-max: 1440px;
+
+  /* ── Accessibilité ────────────────────────────────── */
+  --tap: 44px;
   --color-focus: #1a73e8;
 
-  /* Typographie — polices système en attendant les polices finales auto-hébergées */
-  --font-display: 'Anton', Impact, 'Arial Narrow Bold', sans-serif;
-  --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --text-sm: 0.875rem;
-  --text-base: 1rem;
+  /* ── Alias sémantiques (pages internes, encore sans maquette) ── */
+  --color-brand: var(--texte-marque-rouge);
+  --color-brand-strong: var(--fond-action-survol);
+  --color-ink: var(--texte-marque-charbon);
+  --color-ink-muted: #4a4a4a;
+  --color-surface: var(--fond-marque-blanc);
+  --color-surface-alt: #f4f4f4;
+  --color-surface-inverse: var(--fond-marque-charbon);
+  --color-on-inverse: var(--texte-marque-blanc);
+  --color-on-brand: var(--texte-marque-blanc);
+  --color-border: #d9d9d9;
+
+  --font-display: var(--famille-titres);
+  --font-body: var(--famille-texte);
+  --text-sm: var(--taille-14);
+  --text-base: var(--taille-16);
   --text-lg: 1.125rem;
   --text-xl: 1.375rem;
-  --text-2xl: clamp(1.6rem, 1.2rem + 1.5vw, 2.2rem);
-  --text-3xl: clamp(2.2rem, 1.5rem + 3vw, 3.5rem);
+  --text-2xl: clamp(1.75rem, 1.3rem + 1.6vw, 2.5rem);
+  --text-3xl: clamp(2.5rem, 1.8rem + 3vw, 4rem);
   --leading: 1.6;
 
-  /* Espacements (échelle 4 px) */
-  --space-1: 0.25rem;
-  --space-2: 0.5rem;
-  --space-3: 0.75rem;
-  --space-4: 1rem;
-  --space-6: 1.5rem;
-  --space-8: 2rem;
-  --space-12: 3rem;
-  --space-16: 4rem;
+  --space-1: var(--espacement-4);
+  --space-2: var(--espacement-8);
+  --space-3: var(--espacement-12);
+  --space-4: var(--espacement-16);
+  --space-6: var(--espacement-24);
+  --space-8: 32px;
+  --space-12: var(--espacement-48);
+  --space-16: var(--espacement-64);
 
-  --radius-sm: 4px;
-  --radius-md: 8px;
+  --radius-sm: 0;
+  --radius-md: 0;
   --container: 72rem;
-  --tap: 44px;
 }

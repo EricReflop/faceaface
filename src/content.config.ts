@@ -14,6 +14,8 @@ const salles = defineCollection({
     codePostal: z.string(),
     ville: z.string(),
     principale: z.boolean().default(false),
+    /** Ordre d’affichage (maquette : René Tys, Géo André, Saint-Exupéry). */
+    ordre: z.number(),
     // À compléter (latitude / longitude) pour le JSON-LD et les itinéraires.
     geo: z.object({ lat: z.number(), lng: z.number() }).nullable().default(null),
   }),

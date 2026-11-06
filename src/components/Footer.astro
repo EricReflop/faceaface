@@ -1,40 +1,65 @@
 ---
-import { getCollection } from 'astro:content';
-import site from '../data/site.json';
-import { adresseComplete } from '../lib/format';
-const salles = await getCollection('salles');
-const telephone = site.telephone as string | null;
+import logo from '../assets/logo.svg';
+import Reseaux from './Reseaux.astro';
+import { piedDePage } from '../lib/navigation';
 ---
-<footer class="section section--inverse">
-  <div class="container grid">
-    <div>
-      <p class="titre">{site.nomComplet}</p>
-      <p>{site.valeurs.join(' · ')}</p>
-      <p><a href={`mailto:${site.email}`}>{site.email}</a></p>
-      {telephone && <p><a href={`tel:${telephone.replace(/\s/g, '')}`}>{telephone}</a></p>}
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="colonnes">
+      <div class="identite">
+        <img src={logo.src} width="138" height="84" alt="Face à Face" loading="lazy" />
+        <p>La boxe thaïlandaise pour tous. Un même club, une même énergie.</p>
+        <Reseaux />
+      </div>
+      {piedDePage.map((col) => (
+        <nav class="colonne" aria-label={col.titre}>
+          <p class="titre">{col.titre}</p>
+          <ul>
+            {col.liens.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+          </ul>
+        </nav>
+      ))}
     </div>
-    <div>
-      <p class="titre">Nos salles</p>
-      <ul>
-        {salles.map((s) => <li><strong>{s.data.nomCourt}</strong> : {adresseComplete(s.data)}</li>)}
-      </ul>
-    </div>
-    <div>
-      <p class="titre">Suivez-nous</p>
-      <ul>
-        <li><a href={site.reseaux.instagram} rel="noopener">Instagram</a></li>
-        <li><a href={site.reseaux.facebook} rel="noopener">Facebook</a></li>
-      </ul>
+
+    <div class="legal">
+      <p>© Face à Face — Boxe thaïlandaise</p>
       <ul>
         <li><a href="/mentions-legales/">Mentions légales</a></li>
         <li><a href="/confidentialite/">Confidentialité</a></li>
       </ul>
+      <!-- TODO club : retirer cette mention quand les photos définitives seront intégrées. -->
+      <p>Photographies provisoires d’illustration</p>
     </div>
   </div>
 </footer>
 
 <style>
-  .titre { font-family: var(--font-display); font-size: var(--text-lg); text-transform: uppercase; }
-  ul { list-style: none; padding: 0; }
-  li { margin-bottom: var(--space-2); }
+  .site-footer { background: var(--fond-marque-charbon); color: var(--texte-marque-blanc); padding-block: var(--espacement-48) var(--espacement-28); }
+  .colonnes { display: flex; flex-direction: column; gap: var(--espacement-40); }
+  .identite { display: flex; flex-direction: column; gap: var(--espacement-20); }
+  .identite p { max-width: 280px; margin: 0; font-size: var(--taille-13); line-height: 1.6; }
+  .identite :global(.reseaux) { margin-left: -6px; }
+  .colonne { display: flex; flex-direction: column; gap: var(--espacement-20); }
+  .titre { margin: 0; font-size: var(--taille-10); font-weight: 700; letter-spacing: 1.6px; line-height: 1.2; text-transform: uppercase; }
+  ul { list-style: none; margin: 0; padding: 0; }
+  .colonne ul { display: flex; flex-direction: column; }
+  .colonne a { display: flex; align-items: center; min-height: 32px; color: var(--texte-marque-blanc); font-size: var(--taille-14); line-height: 1; text-decoration: none; }
+  .colonne a:hover { text-decoration: underline; }
+
+  .legal {
+    display: flex; flex-direction: column; gap: var(--espacement-12);
+    margin-top: var(--espacement-40); padding-top: var(--espacement-22);
+    border-top: 1px solid rgb(255 255 255 / 0.2);
+    font-size: var(--taille-10); line-height: 1.2;
+  }
+  .legal p { margin: 0; }
+  .legal ul { display: flex; gap: var(--espacement-16); }
+  .legal a { display: inline-flex; align-items: center; min-height: 24px; color: var(--texte-marque-blanc); }
+
+  @media (min-width: 64rem) {
+    .site-footer { padding-top: var(--espacement-64); }
+    .colonnes { flex-direction: row; gap: var(--espacement-96); }
+    .colonnes > * { flex: 1 1 0; }
+    .legal { flex-direction: row; justify-content: space-between; align-items: center; margin-top: var(--espacement-48); }
+  }
 </style>

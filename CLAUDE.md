@@ -30,13 +30,17 @@ Voir aussi le [README](README.md) (commandes, TODO du club) et l'[audit](audit/a
 ## Design : Figma est la référence
 
 - Les maquettes et le design system sont faits **dans Figma par le propriétaire**. Ne pas inventer de direction visuelle.
-- `src/styles/tokens.css` est **provisoire** : à remplacer par les variables Figma, avec des noms reliés un à un.
+- Fichier Figma : `hgMWYDItRueQiIl7igw75u` (« Face à Face Website »). Accueil desktop `13:2406`, mobile `13:2641`.
+- `src/styles/tokens.css` reprend les variables Figma (`groupe/nom` → `--groupe-nom`). Polices Inter et Barlow Condensed auto-hébergées via `@fontsource`.
+- **Écart volontaire** : le texte rouge et le fond des boutons utilisent `--texte-marque-rouge` / `--fond-action` (`#D00000`, AA). `#FF0000` (`--fond-marque-rouge`) est réservé aux accents décoratifs.
+- Menu = celui de la maquette (`src/lib/navigation.ts`). « Cours & horaires » et « Le Muay Thaï » ne sont accessibles que par le pied de page et les liens internes.
+- Les pages internes n’ont pas encore de maquette : elles utilisent les alias `--color-*` de `tokens.css`.
 - **Aucune valeur en dur** (couleur, taille, espacement) dans les composants : utiliser les variables `var(--…)`.
 - Le connecteur Figma doit être autorisé via `/mcp` pour lire les fichiers.
 
 ## Accessibilité (RGAA / WCAG 2.2 AA)
 
-- Contraste d'au moins 4,5:1 : le rouge de texte est `--color-brand` (`#D00000`), jamais `#F00000`.
+- Contraste d'au moins 4,5:1 : le rouge de texte est `--texte-marque-rouge` (`#D00000`), jamais `#FF0000`.
 - Cibles tactiles d'au moins 44 px (`--tap`), focus visible, `<label>` sur chaque champ, `alt` pertinent sur chaque image (vide si l'image est décorative).
 - Ne pas bloquer le zoom (`maximum-scale` interdit). Respecter `prefers-reduced-motion`.
 - Le JavaScript est une amélioration : le contenu doit rester utilisable sans JS (voir le planning).
