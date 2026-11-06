@@ -1,0 +1,84 @@
+---
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Planning from '../components/Planning.astro';
+import { breadcrumbs, orgRef } from '../lib/schema';
+
+const fil = [{ name: 'Cours d’essai gratuit', path: '/cours-essai/' }];
+const faq = [
+  { q: 'À partir de quel âge peut-on essayer ?', r: 'Dès 5 ans pour les enfants, puis pour les ados et les adultes, débutants ou confirmés.' },
+  { q: 'Le cours d’essai est-il gratuit ?', r: 'Oui. Les séances d’essai permettent de découvrir l’activité avant toute inscription définitive.' },
+  { q: 'Une place est-elle garantie après l’essai ?', r: 'Les essais sont proposés dans la limite des places disponibles et ne garantissent pas une place si le groupe souhaité est complet.' },
+  { q: 'Les mineurs doivent-ils être accompagnés ?', r: 'Oui, pour les moins de 18 ans la présence d’un parent est obligatoire au début de la séance.' },
+  // TODO club : ajouter « Quel équipement prévoir pour un essai ? » avec la réponse officielle.
+];
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  publisher: orgRef,
+  mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.r } })),
+};
+---
+<Base
+  title="Cours d’essai gratuit de boxe thaï à Reims"
+  description="Testez le Muay Thaï gratuitement à Reims : séances d’essai pour enfants dès 5 ans, ados et adultes, sans expérience. Réservez votre essai chez Face à Face."
+  jsonLd={[breadcrumbs(fil), faqLd]}
+>
+  <Breadcrumbs items={fil} />
+  <PageHeader
+    titre="Cours d’essai gratuit"
+    intro="Chaque année, Face à Face organise des séances d’essai gratuites. Enfants dès 5 ans, adolescents et adultes : venez découvrir le Muay Thaï."
+  />
+
+  <section class="section" aria-labelledby="form-titre">
+    <div class="container cols">
+      <div class="prose">
+        <h2 id="form-titre">Réserver mon essai</h2>
+        <p>Indiquez-nous le groupe qui vous intéresse : nous vous recontactons avec la prochaine date disponible.</p>
+        <form name="essai" method="POST" action="/merci/" data-netlify="true" netlify-honeypot="site-web">
+          <input type="hidden" name="form-name" value="essai" />
+          <p class="visually-hidden"><label>Ne pas remplir : <input name="site-web" tabindex="-1" autocomplete="off" /></label></p>
+          <div class="field"><label for="e-nom">Nom et prénom</label><input id="e-nom" name="nom" autocomplete="name" required /></div>
+          <div class="field"><label for="e-email">E-mail</label><input id="e-email" name="email" type="email" autocomplete="email" required /></div>
+          <div class="field"><label for="e-tel">Téléphone <span class="hint">(facultatif)</span></label><input id="e-tel" name="telephone" type="tel" autocomplete="tel" /></div>
+          <div class="field">
+            <label for="e-groupe">Groupe souhaité</label>
+            <select id="e-groupe" name="groupe" required>
+              <option value="">Choisir…</option>
+              <option>Enfants (5–8 ans)</option>
+              <option>Jeunes (9–12 ans)</option>
+              <option>Débutants (13 ans et +)</option>
+              <option>Avancés (13 ans et +)</option>
+              <option>Je ne sais pas</option>
+            </select>
+          </div>
+          <div class="field"><label for="e-msg">Message <span class="hint">(facultatif)</span></label><textarea id="e-msg" name="message" rows="4"></textarea></div>
+          <p class="hint">Vos données servent uniquement à vous recontacter pour l’essai. <a href="/confidentialite/">En savoir plus</a>.</p>
+          <button class="btn" type="submit">Envoyer ma demande</button>
+        </form>
+      </div>
+
+      <div class="prose">
+        <h2>Bon à savoir</h2>
+        <dl class="faq">
+          {faq.map((f) => (<><dt>{f.q}</dt><dd>{f.r}</dd></>))}
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt" aria-labelledby="planning-titre">
+    <div class="container">
+      <h2 id="planning-titre">Les créneaux</h2>
+      <Planning titreId="planning-titre" />
+    </div>
+  </section>
+</Base>
+
+<style>
+  .cols { display: grid; gap: var(--space-12); }
+  @media (min-width: 56rem) { .cols { grid-template-columns: 1fr 1fr; } }
+  dt { font-weight: 700; margin-top: var(--space-4); }
+  dd { margin: var(--space-1) 0 0; }
+</style>

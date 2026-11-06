@@ -1,0 +1,12 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+---
+<Base title="Page introuvable" description="Cette page n’existe pas ou a été déplacée." noindex>
+  <PageHeader titre="Page introuvable" intro="Cette page n’existe pas ou a été déplacée.">
+    <div class="actions">
+      <a class="btn" href="/">Retour à l’accueil</a>
+      <a class="btn btn--secondary" href="/cours-horaires/">Voir les horaires</a>
+    </div>
+  </PageHeader>
+</Base>

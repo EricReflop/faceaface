@@ -1,0 +1,32 @@
+[
+  {
+    "id": "rene-tys",
+    "nom": "Gymnase René Tys",
+    "nomCourt": "René Tys",
+    "adresse": "5 Impasse Léo Lagrange",
+    "codePostal": "51100",
+    "ville": "Reims",
+    "principale": true,
+    "geo": null
+  },
+  {
+    "id": "saint-exupery",
+    "nom": "Gymnase Saint-Exupéry",
+    "nomCourt": "Saint-Exupéry",
+    "adresse": "22 rue Saint-Exupéry",
+    "codePostal": "51100",
+    "ville": "Reims",
+    "principale": false,
+    "geo": null
+  },
+  {
+    "id": "geo-andre",
+    "nom": "Gymnase Géo André",
+    "nomCourt": "Géo André",
+    "adresse": "Avenue François Mauriac",
+    "codePostal": "51100",
+    "ville": "Reims",
+    "principale": false,
+    "geo": null
+  }
+]

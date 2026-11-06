@@ -1,0 +1,86 @@
+---
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Tarifs from '../components/Tarifs.astro';
+import site from '../data/site.json';
+import { breadcrumbs } from '../lib/schema';
+
+const fil = [{ name: 'Inscription & tarifs', path: '/inscription/' }];
+---
+<Base
+  title={`Inscription & tarifs ${site.saison}`}
+  description={`Tarifs ${site.saison} du club de boxe thaï Face à Face à Reims : dès 180 €/an. Réservation sur HelloAsso, Pass’Sport, Reims Ticket Sport et ANCV acceptés.`}
+  jsonLd={breadcrumbs(fil)}
+>
+  <Breadcrumbs items={fil} />
+  <PageHeader titre="Inscription & tarifs" intro={`Réservez votre place pour la saison ${site.saison}, directement en ligne.`}>
+    <a class="btn" href={site.helloasso} rel="noopener">Je réserve ma place sur HelloAsso</a>
+  </PageHeader>
+
+  <section class="section" aria-labelledby="etapes-titre">
+    <div class="container prose">
+      <h2 id="etapes-titre">Comment s’inscrire ?</h2>
+      <ol class="etapes">
+        <li><strong>Je réserve en ligne</strong> sur HelloAsso en choisissant ma catégorie : ancien adhérent, enfant (dès 5 ans) ou nouveau pratiquant.</li>
+        <li><strong>Je verse un acompte de 50 €</strong>, entièrement déduit de la cotisation annuelle.</li>
+        <li><strong>À partir de la mi-août</strong>, je reçois la confirmation de mon groupe, les documents à compléter et les infos pratiques.</li>
+        <li><strong>Je finalise mon inscription</strong> à la rentrée et je règle le solde de la cotisation.</li>
+      </ol>
+      <p>Certaines catégories sont proposées dans la limite des places disponibles. Vous hésitez sur votre catégorie ? <a href="/contact/">Contactez-nous</a>.</p>
+    </div>
+  </section>
+
+  <section class="section section--alt" aria-labelledby="tarifs-titre">
+    <div class="container">
+      <h2 id="tarifs-titre">Tarifs {site.saison}</h2>
+      <Tarifs />
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="reglement-titre">
+    <div class="container grid">
+      <div>
+        <h2 id="reglement-titre">Règlement</h2>
+        <ul>
+          <li>Carte bancaire</li>
+          <li>Chèque à l’ordre de l’association FACE A FACE (paiement en plusieurs fois possible)</li>
+          <li>Espèces (un seul règlement)</li>
+          <li>Pass’Port Loisirs CAF 51</li>
+          <li>Pass’Sport</li>
+          <li>Reims Ticket Sport</li>
+          <li>Chèques ANCV et Coupons Sport ANCV</li>
+        </ul>
+      </div>
+      <div>
+        <h2>Réductions</h2>
+        <p class="hint">Offres non cumulables entre elles.</p>
+        <ul>
+          <li><strong>-10 %</strong> pour les demandeurs d’emploi et les étudiants de 16 à 25 ans.</li>
+          <li><strong>Parrainage</strong> : -40 € pour 1 filleul, -50 € pour 2, -60 € pour 3 (filleul jamais adhérent, inscrit pour une saison complète en même temps que le parrain).</li>
+          <li><strong>Reims Ticket Sport</strong> : -50 € la 1ʳᵉ année, -40 € la 2ᵉ, -30 € la 3ᵉ (engagement sur 3 ans, dès 5 ans). <a href="https://www.reims.fr/sports-loisirs/sports-et-loisirs-pour-les-3-17-ans/reims-ticket-sport" rel="noopener">En savoir plus</a></li>
+          <li><strong>Pass’Sport</strong> : 70 € pour les bénéficiaires éligibles. <a href="https://www.education.gouv.fr/le-pass-sport-458742" rel="noopener">Conditions</a></li>
+        </ul>
+        <p>Le Pass’Sport et le Reims Ticket Sport sont cumulables.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt" aria-labelledby="materiel-titre">
+    <div class="container prose">
+      <h2 id="materiel-titre">Matériel obligatoire</h2>
+      <ul>
+        <li>Short de Muay Thaï (le club propose des shorts personnalisés)</li>
+        <li>Protège-tibias et dessus de pieds</li>
+        <li>Gants</li>
+        <li>Coquille et protège-dents</li>
+      </ul>
+      <p>Aucun autre vêtement ou accessoire n’est accepté. Un legging de sport peut être porté sous le short. Le club peut vous fournir le matériel complet : renseignez-vous sur place.</p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .etapes li { margin-bottom: var(--space-3); }
+  .hint { color: var(--color-ink-muted); font-size: var(--text-sm); }
+</style>

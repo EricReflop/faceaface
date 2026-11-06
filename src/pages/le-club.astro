@@ -1,0 +1,80 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import PageHeader from '../components/PageHeader.astro';
+import CtaEssai from '../components/CtaEssai.astro';
+import site from '../data/site.json';
+import { breadcrumbs } from '../lib/schema';
+
+const fil = [{ name: 'Le club', path: '/le-club/' }];
+const coachs = (await getCollection('coachs')).sort((a, b) => a.data.ordre - b.data.ordre);
+---
+<Base
+  title="Le club de Muay Thaï Face à Face à Reims"
+  description="Face à Face, club de boxe thaï à Reims : près de 200 pratiquants, plus de 120 titres en 20 ans, du régional au mondial, et des coachs diplômés et champions."
+  jsonLd={breadcrumbs(fil)}
+>
+  <Breadcrumbs items={fil} />
+  <PageHeader titre="Le club" intro="Un club efficace et convivial de Muay Thaï à Reims, porté par une équipe soudée de dirigeants, d’amis et de compétiteurs." />
+
+  <section class="section" aria-labelledby="chiffres-titre">
+    <div class="container">
+      <h2 id="chiffres-titre" class="visually-hidden">Le club en chiffres</h2>
+      <ul class="grid chiffres">
+        <li class="card"><strong>≈ 200</strong> pratiquants</li>
+        <li class="card"><strong>120+</strong> titres en 20 ans</li>
+        <li class="card"><strong>3</strong> gymnases à Reims</li>
+        <li class="card"><strong>Dès 5 ans</strong> enfants, ados, adultes</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--alt" aria-labelledby="esprit-titre">
+    <div class="container prose">
+      <h2 id="esprit-titre">L’esprit Face à Face</h2>
+      <p>Le Muay Thaï est un sport complet qui demande beaucoup de discipline. Nous demandons à nos membres une attitude irréprochable, dans la salle comme à l’extérieur.</p>
+      <p>Les entraînements se déroulent dans le même esprit qu’au Mejiro Gym d’Amsterdam : tous les pratiquants travaillent les enchaînements en même temps, au signal, pour la concentration et le temps de réaction.</p>
+      <h3>Au programme des séances</h3>
+      <ul>
+        <li>Échauffement musculaire et articulaire, travail avec lests</li>
+        <li>Étirements</li>
+        <li>Travail technique avec ou sans partenaire, shadow-boxing</li>
+        <li>Travail au sac, au pao et aux pattes d’ours</li>
+        <li>Corps à corps</li>
+        <li>Renforcement musculaire</li>
+      </ul>
+      <p><strong>Nos valeurs :</strong> {site.valeurs.join(', ')}, respect envers son entraîneur et ses partenaires, maîtrise de soi.</p>
+      <blockquote>
+        <p>« Nous respectons tous les arts martiaux et sports de combat, c’est un honneur pour nous de faire découvrir et aimer notre art à un pratiquant d’une autre discipline. »</p>
+        <footer>Jean-Marc Guillot</footer>
+      </blockquote>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="coachs-titre" id="coachs">
+    <div class="container">
+      <h2 id="coachs-titre">Les coachs</h2>
+      <ul class="grid liste">
+        {coachs.map((c) => (
+          <li class="card">
+            <h3><a href={`/coachs/${c.id}/`}>{c.data.nom}</a></h3>
+            <p><em>{c.data.role}</em></p>
+            <p>{c.data.resume}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- Galerie photo (images optimisées via astro:assets) à ajouter selon la maquette -->
+
+  <CtaEssai />
+</Base>
+
+<style>
+  .chiffres, .liste { list-style: none; padding: 0; }
+  .chiffres strong { display: block; font-family: var(--font-display); font-size: var(--text-2xl); color: var(--color-brand); font-weight: 400; }
+  blockquote { margin: var(--space-6) 0; padding-left: var(--space-4); border-left: 4px solid var(--color-brand); }
+  blockquote footer { font-weight: 600; }
+</style>

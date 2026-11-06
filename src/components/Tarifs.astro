@@ -1,0 +1,47 @@
+---
+import { getCollection, getEntries } from 'astro:content';
+import { prix } from '../lib/format';
+
+const tarifs = await getCollection('tarifs');
+const lignes = await Promise.all(
+  tarifs.map(async (t) => ({ t, coachs: await getEntries(t.data.coachs) })),
+);
+---
+<div class="table-wrap">
+  <table>
+    <caption>Cotisations annuelles, saison de septembre à juin</caption>
+    <thead>
+      <tr>
+        <th scope="col">Formule</th>
+        <th scope="col">Lieu</th>
+        <th scope="col">Âge et tarif</th>
+        <th scope="col">Coach</th>
+      </tr>
+    </thead>
+    <tbody>
+      {lignes.map(({ t, coachs }) => (
+        <tr>
+          <th scope="row">{t.data.formule}</th>
+          <td>{t.data.lieu}</td>
+          <td>
+            <ul>
+              {t.data.prix.map((p) => <li>{p.age} : <strong>{prix(p.montant)}</strong></li>)}
+            </ul>
+          </td>
+          <td>{coachs.map((c) => c.data.nom).join(', ')}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+<p class="note">Adhésion de 50 € et assurance incluses (détail des garanties au club). Les compétiteurs ont une licence spécifique : voir directement avec le club.</p>
+
+<style>
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; min-width: 36rem; border-collapse: collapse; background: var(--color-surface); }
+  caption { text-align: left; font-weight: 600; padding-bottom: var(--space-2); }
+  th, td { text-align: left; padding: var(--space-3); border-bottom: 1px solid var(--color-border); vertical-align: top; }
+  thead th { background: var(--color-surface-inverse); color: var(--color-on-inverse); font-size: var(--text-sm); text-transform: uppercase; }
+  ul { list-style: none; padding: 0; margin: 0; }
+  .note { font-size: var(--text-sm); color: var(--color-ink-muted); margin-top: var(--space-3); }
+</style>

@@ -1,0 +1,40 @@
+---
+import { getCollection } from 'astro:content';
+import site from '../data/site.json';
+import { adresseComplete } from '../lib/format';
+const salles = await getCollection('salles');
+const telephone = site.telephone as string | null;
+---
+<footer class="section section--inverse">
+  <div class="container grid">
+    <div>
+      <p class="titre">{site.nomComplet}</p>
+      <p>{site.valeurs.join(' · ')}</p>
+      <p><a href={`mailto:${site.email}`}>{site.email}</a></p>
+      {telephone && <p><a href={`tel:${telephone.replace(/\s/g, '')}`}>{telephone}</a></p>}
+    </div>
+    <div>
+      <p class="titre">Nos salles</p>
+      <ul>
+        {salles.map((s) => <li><strong>{s.data.nomCourt}</strong> : {adresseComplete(s.data)}</li>)}
+      </ul>
+    </div>
+    <div>
+      <p class="titre">Suivez-nous</p>
+      <ul>
+        <li><a href={site.reseaux.instagram} rel="noopener">Instagram</a></li>
+        <li><a href={site.reseaux.facebook} rel="noopener">Facebook</a></li>
+      </ul>
+      <ul>
+        <li><a href="/mentions-legales/">Mentions légales</a></li>
+        <li><a href="/confidentialite/">Confidentialité</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .titre { font-family: var(--font-display); font-size: var(--text-lg); text-transform: uppercase; }
+  ul { list-style: none; padding: 0; }
+  li { margin-bottom: var(--space-2); }
+</style>

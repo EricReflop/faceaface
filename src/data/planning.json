@@ -1,0 +1,23 @@
+[
+  { "id": "enf-mer",      "groupe": "enfants",   "jour": "mercredi", "debut": "13:00", "fin": "14:00", "salle": "rene-tys",      "coach": "zohir-remidi" },
+
+  { "id": "jeu-mer",      "groupe": "jeunes",    "jour": "mercredi", "debut": "16:45", "fin": "18:00", "salle": "rene-tys",      "coach": "zohir-remidi" },
+  { "id": "jeu-sam",      "groupe": "jeunes",    "jour": "samedi",   "debut": "13:00", "fin": "14:00", "salle": "rene-tys",      "coach": "zohir-remidi" },
+
+  { "id": "deb-lun-rt",   "groupe": "debutants", "jour": "lundi",    "debut": "20:00", "fin": "21:45", "salle": "rene-tys",      "coach": "jean-marc-guillot" },
+  { "id": "deb-mer-rt",   "groupe": "debutants", "jour": "mercredi", "debut": "15:15", "fin": "16:30", "salle": "rene-tys",      "coach": "jean-marc-guillot" },
+  { "id": "deb-jeu-rt",   "groupe": "debutants", "jour": "jeudi",    "debut": "20:00", "fin": "21:45", "salle": "rene-tys",      "coach": "jean-marc-guillot", "note": "Cours commun débutants / avancés" },
+  { "id": "deb-sam-ga",   "groupe": "debutants", "jour": "samedi",   "debut": "15:00", "fin": "16:30", "salle": "geo-andre",     "coach": "zohir-remidi" },
+  { "id": "deb-sam-se",   "groupe": "debutants", "jour": "samedi",   "debut": "19:00", "fin": "20:30", "salle": "saint-exupery", "coach": "zohir-remidi" },
+
+  { "id": "av-lun-rt",    "groupe": "avances",   "jour": "lundi",    "debut": "18:30", "fin": "20:00", "salle": "rene-tys",      "coach": "jean-marc-guillot" },
+  { "id": "av-mar-rt",    "groupe": "avances",   "jour": "mardi",    "debut": "20:00", "fin": "21:45", "salle": "rene-tys",      "coach": "jean-marc-guillot" },
+  { "id": "av-mer-rt",    "groupe": "avances",   "jour": "mercredi", "debut": "14:00", "fin": "15:15", "salle": "rene-tys",      "coach": "jean-marc-guillot" },
+  { "id": "av-jeu1-rt",   "groupe": "avances",   "jour": "jeudi",    "debut": "18:30", "fin": "20:00", "salle": "rene-tys",      "coach": "jean-marc-guillot" },
+  { "id": "av-jeu2-rt",   "groupe": "avances",   "jour": "jeudi",    "debut": "20:00", "fin": "21:45", "salle": "rene-tys",      "coach": "jean-marc-guillot", "note": "Cours commun débutants / avancés" },
+  { "id": "av-ven-se",    "groupe": "avances",   "jour": "vendredi", "debut": "20:00", "fin": "21:30", "salle": "saint-exupery", "coach": "zohir-remidi" },
+  { "id": "av-sam-ga",    "groupe": "avances",   "jour": "samedi",   "debut": "16:30", "fin": "18:00", "salle": "geo-andre",     "coach": "zohir-remidi" },
+
+  { "id": "lib-mar",      "groupe": "libre",     "jour": "mardi",    "debut": "12:00", "fin": "14:00", "salle": "rene-tys",      "coach": null },
+  { "id": "lib-jeu",      "groupe": "libre",     "jour": "jeudi",    "debut": "12:00", "fin": "14:00", "salle": "rene-tys",      "coach": null }
+]

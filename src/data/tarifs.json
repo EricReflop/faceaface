@@ -1,0 +1,6 @@
+[
+  { "id": "enfants",          "formule": "Formule enfants",   "lieu": "René Tys",                      "coachs": ["zohir-remidi"],                          "prix": [ { "age": "5 – 8 ans", "montant": 180 }, { "age": "9 – 12 ans", "montant": 240 } ] },
+  { "id": "classique-rt",     "formule": "Formule classique", "lieu": "René Tys",                      "coachs": ["jean-marc-guillot"],                     "prix": [ { "age": "13 – 16 ans", "montant": 263 }, { "age": "16 ans et +", "montant": 323 } ] },
+  { "id": "classique-ga-se",  "formule": "Formule classique", "lieu": "Géo André & Saint-Exupéry",     "coachs": ["zohir-remidi"],                          "prix": [ { "age": "13 – 16 ans", "montant": 220 }, { "age": "16 ans et +", "montant": 260 } ] },
+  { "id": "premium",          "formule": "Formule premium",   "lieu": "Accès à tous les gymnases",     "coachs": ["jean-marc-guillot", "zohir-remidi"],     "prix": [ { "age": "13 – 16 ans", "montant": 420 }, { "age": "16 ans et +", "montant": 520 } ] }
+]

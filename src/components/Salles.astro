@@ -1,0 +1,25 @@
+---
+import { getCollection } from 'astro:content';
+import { adresseComplete, lienItineraire } from '../lib/format';
+
+interface Props { niveauTitre?: 'h2' | 'h3' }
+const { niveauTitre = 'h3' } = Astro.props;
+const Titre = niveauTitre;
+const salles = await getCollection('salles');
+---
+<ul class="grid salles">
+  {salles.map((s) => (
+    <li class="card">
+      <Titre>{s.data.nom}</Titre>
+      <address>{adresseComplete(s.data)}</address>
+      <a href={lienItineraire(s.data)} rel="noopener">
+        Voir l’itinéraire<span class="visually-hidden"> vers le {s.data.nom}</span>
+      </a>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .salles { list-style: none; padding: 0; }
+  address { font-style: normal; margin-bottom: var(--space-3); }
+</style>

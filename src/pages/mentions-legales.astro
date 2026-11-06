@@ -1,0 +1,27 @@
+---
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import PageHeader from '../components/PageHeader.astro';
+import site from '../data/site.json';
+
+const fil = [{ name: 'Mentions légales', path: '/mentions-legales/' }];
+---
+<Base title="Mentions légales" description="Mentions légales du site de Face à Face, club de Muay Thaï à Reims : éditeur, hébergeur et propriété intellectuelle.">
+  <Breadcrumbs items={fil} />
+  <PageHeader titre="Mentions légales" />
+  <section class="section">
+    <div class="container prose">
+      <!-- TODO club : compléter les informations marquées [à compléter]. -->
+      <h2>Éditeur du site</h2>
+      <p>Association FACE A FACE, association loi 1901<br />
+        Siège : [à compléter]<br />
+        N° RNA : [à compléter]<br />
+        Directeur de la publication : [à compléter]<br />
+        Contact : <a href={`mailto:${site.email}`}>{site.email}</a></p>
+      <h2>Hébergement</h2>
+      <p>Netlify, Inc., 512 2nd Street, Suite 200, San Francisco, CA 94107, États-Unis.</p>
+      <h2>Propriété intellectuelle</h2>
+      <p>Les textes, photos et logos de ce site appartiennent à l’association FACE A FACE ou à leurs auteurs. Toute reproduction nécessite une autorisation préalable.</p>
+    </div>
+  </section>
+</Base>

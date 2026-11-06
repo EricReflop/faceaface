@@ -1,0 +1,12 @@
+# Redirections 301 depuis l'ancien site WordPress (préservation du SEO)
+/envie-dessayer/                        /cours-essai/                  301
+/envie-dessayer-2/                      /cours-essai/                  301
+/jean-marc-guillot/                     /coachs/jean-marc-guillot/     301
+/gallery/                               /le-club/                      301
+/politique-de-protection-des-donnees/   /confidentialite/              301
+/sitemap.xml                            /sitemap-index.xml             301
+/page-sitemap.xml                       /sitemap-index.xml             301
+/sitemap.rss                            /sitemap-index.xml             301
+/feed/                                  /actualites/                   301
+/wp-admin/*                             /                              301
+/wp-login.php                           /                              301

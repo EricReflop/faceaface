@@ -1,0 +1,88 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Planning from '../components/Planning.astro';
+import Salles from '../components/Salles.astro';
+import CtaEssai from '../components/CtaEssai.astro';
+import site from '../data/site.json';
+import { sportsClub } from '../lib/schema';
+import { dateLongue } from '../lib/format';
+
+const actus = (await getCollection('actus', ({ data }) => !data.brouillon))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 3);
+
+const jsonLd = [
+  await sportsClub(),
+  { '@context': 'https://schema.org', '@type': 'WebSite', name: site.nomComplet, url: `${site.url}/`, inLanguage: 'fr-FR' },
+];
+---
+<Base
+  title="Boxe thaï & Muay Thaï à Reims | Club Face à Face"
+  titleBrut
+  description="Club de Muay Thaï à Reims depuis plus de 20 ans : cours de boxe thaï enfants dès 5 ans, ados et adultes, débutants et confirmés. Essai gratuit dans 3 gymnases."
+  jsonLd={jsonLd}
+>
+  <section class="hero section section--inverse" aria-labelledby="hero-titre">
+    <div class="container">
+      <p class="surtitre">Club de Muay Thaï · Reims</p>
+      <h1 id="hero-titre">Boxe thaï à Reims, dès 5 ans</h1>
+      <p class="lead">Enfants, ados et adultes, débutants ou confirmés : 3 gymnases, des coachs diplômés et champions, plus de 120 titres en 20 ans.</p>
+      <div class="actions">
+        <a class="btn" href="/cours-essai/">Essayer gratuitement</a>
+        <a class="btn btn--secondary" href="#horaires">Voir les horaires</a>
+      </div>
+      <!-- Visuel hero (image AVIF optimisée, fetchpriority="high") à intégrer selon la maquette Figma -->
+    </div>
+  </section>
+
+  <section id="horaires" class="section" aria-labelledby="planning-titre">
+    <div class="container">
+      <h2 id="planning-titre">Les entraînements</h2>
+      <p class="lead">Horaires {site.periodeSaison}. Filtrez par groupe ou par salle.</p>
+      <Planning titreId="planning-titre" />
+    </div>
+  </section>
+
+  <section class="section section--alt" aria-labelledby="salles-titre">
+    <div class="container">
+      <h2 id="salles-titre">Nos salles</h2>
+      <Salles />
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="club-titre">
+    <div class="container prose">
+      <h2 id="club-titre">Plus qu’un sport, une philosophie</h2>
+      <p>{site.valeurs.join(', ')} : les valeurs du Muay Thaï guident chaque entraînement chez Face à Face. Le club réunit près de 200 pratiquants encadrés par Jean-Marc Guillot (diplômé d’État) et Zohir Remidi (champion de France professionnel).</p>
+      <p><a href="/le-club/">Découvrir le club et ses coachs</a></p>
+    </div>
+  </section>
+
+  {actus.length > 0 && (
+    <section class="section section--alt" aria-labelledby="actus-titre">
+      <div class="container">
+        <h2 id="actus-titre">L’actu du club</h2>
+        <ul class="grid liste">
+          {actus.map((a) => (
+            <li class="card">
+              <h3><a href={`/actualites/${a.id}/`}>{a.data.titre}</a></h3>
+              <p><time datetime={a.data.date.toISOString()}>{dateLongue(a.data.date)}</time></p>
+              <p>{a.data.description}</p>
+            </li>
+          ))}
+        </ul>
+        <p><a href="/actualites/">Toutes les actualités</a></p>
+      </div>
+    </section>
+  )}
+
+  <CtaEssai />
+</Base>
+
+<style>
+  .hero { padding-block: var(--space-16); }
+  .surtitre { text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; color: var(--color-on-inverse); }
+  .hero .lead { color: var(--color-on-inverse); }
+  .liste { list-style: none; padding: 0; }
+</style>

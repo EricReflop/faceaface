@@ -1,0 +1,15 @@
+---
+interface Props { titre: string; intro?: string }
+const { titre, intro } = Astro.props;
+---
+<header class="page-header">
+  <div class="container">
+    <h1>{titre}</h1>
+    {intro && <p class="lead">{intro}</p>}
+    <slot />
+  </div>
+</header>
+
+<style>
+  .page-header { padding-block: var(--space-8) var(--space-6); border-bottom: 4px solid var(--color-brand); }
+</style>

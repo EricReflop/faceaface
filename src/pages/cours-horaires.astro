@@ -1,0 +1,51 @@
+---
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Planning from '../components/Planning.astro';
+import Salles from '../components/Salles.astro';
+import CtaEssai from '../components/CtaEssai.astro';
+import site from '../data/site.json';
+import { breadcrumbs, sportsClub } from '../lib/schema';
+
+const fil = [{ name: 'Cours & horaires', path: '/cours-horaires/' }];
+---
+<Base
+  title="Horaires des cours de boxe thaï à Reims"
+  description={`Planning ${site.saison} des cours de Muay Thaï à Reims : enfants dès 5 ans, jeunes, débutants et avancés, aux gymnases René Tys, Géo André et Saint-Exupéry.`}
+  jsonLd={[await sportsClub(), breadcrumbs(fil)]}
+>
+  <Breadcrumbs items={fil} />
+  <PageHeader titre="Cours & horaires" intro={`Horaires ${site.periodeSaison}. Choisissez votre groupe et votre salle.`} />
+
+  <section class="section" aria-labelledby="planning-titre">
+    <div class="container">
+      <h2 id="planning-titre">Planning de la saison {site.saison}</h2>
+      <Planning titreId="planning-titre" />
+    </div>
+  </section>
+
+  <section class="section section--alt" aria-labelledby="groupes-titre">
+    <div class="container prose">
+      <h2 id="groupes-titre">Quel groupe choisir ?</h2>
+      <ul>
+        <!-- TODO club : valider ou enrichir la description de chaque groupe. -->
+        <li><strong>Enfants (5–8 ans)</strong> : initiation.</li>
+        <li><strong>Jeunes (9–12 ans)</strong> : progression.</li>
+        <li><strong>Débutants (13 ans et +)</strong> : aucune expérience nécessaire.</li>
+        <li><strong>Avancés (13 ans et +)</strong> : pratiquants confirmés.</li>
+        <li><strong>Entraînement libre</strong> : créneaux du midi au gymnase René Tys.</li>
+      </ul>
+      <p>Un doute sur votre niveau ? <a href="/contact/">Contactez-nous</a>, nous vous orienterons.</p>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="salles-titre">
+    <div class="container">
+      <h2 id="salles-titre">Les gymnases</h2>
+      <Salles />
+    </div>
+  </section>
+
+  <CtaEssai />
+</Base>

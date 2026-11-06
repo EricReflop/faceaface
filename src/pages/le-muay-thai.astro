@@ -1,0 +1,48 @@
+---
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import PageHeader from '../components/PageHeader.astro';
+import CtaEssai from '../components/CtaEssai.astro';
+import { breadcrumbs, orgRef } from '../lib/schema';
+
+const fil = [{ name: 'Le Muay Thaï', path: '/le-muay-thai/' }];
+const articleLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: 'Le Muay Thaï : histoire et principes de la boxe thaï',
+  inLanguage: 'fr-FR',
+  author: orgRef,
+  publisher: orgRef,
+};
+---
+<Base
+  title="Le Muay Thaï : histoire et règles"
+  description="Origines, légendes et règles du Muay Thaï, l’art des huit membres : poings, pieds, genoux et coudes. Découvrez la boxe thaï avant votre premier cours à Reims."
+  jsonLd={[breadcrumbs(fil), articleLd]}
+>
+  <Breadcrumbs items={fil} />
+  <PageHeader titre="Le Muay Thaï" intro="L’art des huit membres : deux poings, deux pieds, deux genoux et deux coudes." />
+
+  <article class="section">
+    <div class="container prose">
+      <h2>Historique</h2>
+      <p>En 1411, à la mort du roi Sen Muang Ma, ses deux fils Ki et Fang voulurent s’emparer du pouvoir. Comme leurs armées n’arrivaient pas à se départager, ils réglèrent leur conflit par un duel entre leurs meilleurs boxeurs. L’homme de Fang fut battu, Ki monta sur le trône, et la technique de son boxeur fit école.</p>
+      <p>La légende raconte qu’en 1767, en pleine guerre birmano-thaïlandaise, Naï Khanom Tom, soldat et boxeur fait prisonnier, fut opposé à dix champions birmans qu’il mit KO. Devenu héros national, il est honoré chaque année lors de la « Nuit des boxeurs ».</p>
+      <p>Au XVIᵉ siècle, le Muay Thaï faisait partie de l’entraînement militaire. Il atteignit son apogée au début du XVIIIᵉ siècle, sous le règne de Pra Chao Sua, « le Roi Tigre », lui-même boxeur redoutable qui défiait les champions locaux. Chaque village organisait alors régulièrement des combats.</p>
+      <p>Les combattants protégeaient d’abord leurs poings avec du crin de cheval, remplacé plus tard par des bandes de coton encollées. Les combats se déroulaient sans catégories de poids ni limite de temps.</p>
+      <p>Jugée trop dangereuse, la boxe thaïlandaise fut interdite en 1921. Elle réapparut vers 1930 en adoptant les règles et les techniques de poings de la boxe anglaise : gants, ring, rounds.</p>
+
+      <h2>Un sport complet</h2>
+      <p>Le Muay Thaï utilise huit armes : deux poings, deux pieds, deux genoux et deux coudes. Les coups de tête sont interdits. Il demande une grande vigilance, car le coup peut venir de partout. Les saisies permettent de temporiser ; les projections ne rapportent pas de points mais permettent de sortir d’un corps-à-corps.</p>
+      <p>Les combats se déroulent selon un rituel : avant de combattre, les boxeurs s’agenouillent et prient, et tout le match est rythmé par un petit orchestre thaï jouant en direct.</p>
+
+      <h2>Le Muay Thaï en Thaïlande</h2>
+      <p>Sport national, le Muay Thaï fait vivre environ 200 000 personnes : boxeurs, entraîneurs, commerçants. Ses deux stades les plus célèbres sont à Bangkok : le Lumpinee, sur Rama IV Road, et le Rajadamnern, sur Rajadamnern Nok Road.</p>
+
+      <h2>Un état d’esprit</h2>
+      <p>Pour Roger Paschy, l’un des pionniers de la discipline en France, la boxe thaï « nécessite beaucoup de volonté et d’assiduité », et le professeur a un rôle fondamental dans la formation de l’élève. C’est l’esprit transmis chaque semaine au club Face à Face.</p>
+    </div>
+  </article>
+
+  <CtaEssai />
+</Base>

@@ -1,0 +1,125 @@
+---
+/**
+ * Planning des cours, généré depuis src/data/planning.json.
+ * Sans JavaScript : tableau complet. Avec JavaScript : filtres par groupe et par salle.
+ */
+import { getCollection, getEntry } from 'astro:content';
+import { capitalize, heure, ordreJour } from '../lib/format';
+
+interface Props { filtres?: boolean; titreId?: string }
+const { filtres = true, titreId = 'planning-titre' } = Astro.props;
+
+const groupes = (await getCollection('groupes')).sort((a, b) => a.data.ordre - b.data.ordre);
+const salles = await getCollection('salles');
+const creneaux = await getCollection('planning');
+
+const lignes = await Promise.all(
+  creneaux
+    .sort((a, b) => ordreJour(a.data.jour) - ordreJour(b.data.jour) || a.data.debut.localeCompare(b.data.debut))
+    .map(async (c) => {
+      const groupe = groupes.find((g) => g.id === c.data.groupe.id)!;
+      const salle = salles.find((s) => s.id === c.data.salle.id)!;
+      const coach = c.data.coach ? await getEntry(c.data.coach) : null;
+      return { c, groupe, salle, coach };
+    }),
+);
+
+const age = (g: (typeof groupes)[number]) =>
+  g.data.ageMax ? `${g.data.ageMin}–${g.data.ageMax} ans` : `${g.data.ageMin} ans et +`;
+---
+<div class="planning" data-planning>
+  {filtres && (
+    <form class="filtres" aria-labelledby={titreId} data-filtres hidden>
+      <fieldset>
+        <legend>Groupe</legend>
+        <label><input type="radio" name="groupe" value="" checked /> Tous</label>
+        {groupes.map((g) => (
+          <label><input type="radio" name="groupe" value={g.id} /> {g.data.nom} <small>({age(g)})</small></label>
+        ))}
+      </fieldset>
+      <fieldset>
+        <legend>Salle</legend>
+        <label><input type="radio" name="salle" value="" checked /> Toutes</label>
+        {salles.map((s) => (
+          <label><input type="radio" name="salle" value={s.id} /> {s.data.nomCourt}</label>
+        ))}
+      </fieldset>
+      <p class="compteur" aria-live="polite" data-compteur></p>
+    </form>
+  )}
+
+  <table>
+    <caption class="visually-hidden">Horaires des cours de Muay Thaï par jour, groupe, salle et coach</caption>
+    <thead>
+      <tr><th scope="col">Jour</th><th scope="col">Horaire</th><th scope="col">Groupe</th><th scope="col">Salle</th><th scope="col">Coach</th></tr>
+    </thead>
+    <tbody>
+      {lignes.map(({ c, groupe, salle, coach }) => (
+        <tr data-groupe={groupe.id} data-salle={salle.id}>
+          <th scope="row" data-label="Jour">{capitalize(c.data.jour)}</th>
+          <td data-label="Horaire"><span><time>{heure(c.data.debut)}</time> – <time>{heure(c.data.fin)}</time></span></td>
+          <td data-label="Groupe"><span>
+            <span class={`tag tag--${groupe.id}`}>{groupe.data.nom}</span> <small>{age(groupe)}</small>
+            {c.data.note && <><br /><small>{c.data.note}</small></>}
+          </span></td>
+          <td data-label="Salle">{salle.data.nomCourt}</td>
+          <td data-label="Coach"><span>{coach ? <a href={`/coachs/${coach.id}/`}>{coach.data.nom}</a> : '—'}</span></td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-planning]').forEach((root) => {
+    const form = root.querySelector<HTMLFormElement>('[data-filtres]');
+    if (!form) return;
+    form.hidden = false;
+    const rows = [...root.querySelectorAll<HTMLTableRowElement>('tbody tr')];
+    const compteur = form.querySelector('[data-compteur]');
+    const appliquer = () => {
+      const data = new FormData(form);
+      const g = data.get('groupe');
+      const s = data.get('salle');
+      let n = 0;
+      rows.forEach((r) => {
+        const ok = (!g || r.dataset.groupe === g) && (!s || r.dataset.salle === s);
+        r.hidden = !ok;
+        if (ok) n++;
+      });
+      if (compteur) compteur.textContent = `${n} créneau${n > 1 ? 'x' : ''} affiché${n > 1 ? 's' : ''}`;
+    };
+    form.addEventListener('change', appliquer);
+    appliquer();
+  });
+</script>
+
+<style>
+  .filtres { display: grid; gap: var(--space-4); margin-bottom: var(--space-6); }
+  fieldset { border: 0; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: var(--space-2); }
+  legend { font-weight: 700; margin-bottom: var(--space-2); width: 100%; }
+  fieldset label {
+    display: inline-flex; align-items: center; gap: var(--space-2); min-height: var(--tap);
+    padding: var(--space-1) var(--space-4); border: 1px solid var(--color-border); border-radius: 999px;
+    background: var(--color-surface); cursor: pointer;
+  }
+  fieldset label:has(input:checked) { border-color: var(--color-brand); background: var(--color-brand); color: var(--color-on-brand); }
+  fieldset label small { color: inherit; }
+  fieldset input { accent-color: var(--color-brand); }
+  .compteur { font-size: var(--text-sm); color: var(--color-ink-muted); margin: 0; }
+
+  table { width: 100%; border-collapse: collapse; background: var(--color-surface); }
+  th, td { text-align: left; padding: var(--space-3); border-bottom: 1px solid var(--color-border); vertical-align: top; }
+  thead th { background: var(--color-surface-inverse); color: var(--color-on-inverse); font-size: var(--text-sm); text-transform: uppercase; }
+  .tag { display: inline-block; padding: 0 var(--space-2); border-radius: var(--radius-sm); background: var(--color-surface-alt); font-weight: 700; }
+  small { color: var(--color-ink-muted); }
+  tr[hidden] { display: none; }
+
+  @media (max-width: 40rem) {
+    thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+    table, tbody, tr, th, td { display: block; }
+    tr { border: 1px solid var(--color-border); border-radius: var(--radius-md); margin-bottom: var(--space-3); padding: var(--space-2); }
+    th, td { border: 0; padding: var(--space-1) var(--space-2); display: grid; grid-template-columns: 5.5rem 1fr; gap: var(--space-2); }
+    th::before, td::before { content: attr(data-label); font-weight: 600; color: var(--color-ink-muted); font-size: var(--text-sm); }
+  }
+</style>

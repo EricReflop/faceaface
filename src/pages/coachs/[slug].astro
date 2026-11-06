@@ -1,0 +1,65 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import CtaEssai from '../../components/CtaEssai.astro';
+import { breadcrumbs, orgRef } from '../../lib/schema';
+
+export async function getStaticPaths() {
+  const coachs = await getCollection('coachs');
+  return coachs.map((coach) => ({ params: { slug: coach.id }, props: { coach } }));
+}
+
+const { coach } = Astro.props;
+const { Content } = await render(coach);
+const fil = [
+  { name: 'Le club', path: '/le-club/' },
+  { name: coach.data.nom, path: `/coachs/${coach.id}/` },
+];
+const personLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: coach.data.nom,
+  jobTitle: 'Entraîneur de Muay Thaï',
+  description: coach.data.resume,
+  worksFor: orgRef,
+  ...(coach.data.palmares.length ? { award: coach.data.palmares } : {}),
+};
+---
+<Base
+  title={`${coach.data.nom}, entraîneur Muay Thaï`}
+  description={coach.data.resume}
+  jsonLd={[breadcrumbs(fil), personLd]}
+>
+  <Breadcrumbs items={fil} />
+  <PageHeader titre={coach.data.nom} intro={coach.data.role} />
+
+  <section class="section">
+    <div class="container cols">
+      <div class="prose"><Content /></div>
+      <aside>
+        {coach.data.diplomes.length > 0 && (
+          <>
+            <h2>Diplômes et distinctions</h2>
+            <ul>{coach.data.diplomes.map((d) => <li>{d}</li>)}</ul>
+          </>
+        )}
+        {coach.data.palmares.length > 0 && (
+          <>
+            <h2>Palmarès</h2>
+            <ul>{coach.data.palmares.map((p) => <li>{p}</li>)}</ul>
+          </>
+        )}
+      </aside>
+    </div>
+  </section>
+
+  <CtaEssai />
+</Base>
+
+<style>
+  .cols { display: grid; gap: var(--space-12); }
+  @media (min-width: 56rem) { .cols { grid-template-columns: 2fr 1fr; } }
+  aside h2 { font-size: var(--text-xl); }
+</style>

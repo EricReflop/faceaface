@@ -1,0 +1,7 @@
+[
+  { "id": "enfants",   "nom": "Enfants",   "sousTitre": "Initiation",  "ageMin": 5,  "ageMax": 8,    "ordre": 1 },
+  { "id": "jeunes",    "nom": "Jeunes",    "sousTitre": "Progression", "ageMin": 9,  "ageMax": 12,   "ordre": 2 },
+  { "id": "debutants", "nom": "Débutants", "sousTitre": "13 ans et +", "ageMin": 13, "ageMax": null, "ordre": 3 },
+  { "id": "avances",   "nom": "Avancés",   "sousTitre": "13 ans et +", "ageMin": 13, "ageMax": null, "ordre": 4 },
+  { "id": "libre",     "nom": "Entraînement libre", "sousTitre": "Adhérents", "ageMin": 13, "ageMax": null, "ordre": 5 }
+]

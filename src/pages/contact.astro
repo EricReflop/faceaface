@@ -1,0 +1,52 @@
+---
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Salles from '../components/Salles.astro';
+import site from '../data/site.json';
+import { breadcrumbs } from '../lib/schema';
+
+const fil = [{ name: 'Contact', path: '/contact/' }];
+const telephone = site.telephone as string | null;
+const contactLd = { '@context': 'https://schema.org', '@type': 'ContactPage', name: 'Contacter Face à Face', url: new URL('/contact/', Astro.site).href };
+---
+<Base
+  title="Contact et accès"
+  description="Contactez Face à Face, club de Muay Thaï à Reims : e-mail, formulaire et adresses des gymnases René Tys, Géo André et Saint-Exupéry."
+  jsonLd={[breadcrumbs(fil), contactLd]}
+>
+  <Breadcrumbs items={fil} />
+  <PageHeader titre="Contact" intro="Une question ? Besoin d’informations ? Écrivez-nous, nous vous répondons rapidement." />
+
+  <section class="section">
+    <div class="container cols">
+      <div>
+        <h2>Écrivez-nous</h2>
+        <form name="contact" method="POST" action="/merci/" data-netlify="true" netlify-honeypot="site-web">
+          <input type="hidden" name="form-name" value="contact" />
+          <p class="visually-hidden"><label>Ne pas remplir : <input name="site-web" tabindex="-1" autocomplete="off" /></label></p>
+          <div class="field"><label for="c-nom">Nom et prénom</label><input id="c-nom" name="nom" autocomplete="name" required /></div>
+          <div class="field"><label for="c-email">E-mail</label><input id="c-email" name="email" type="email" autocomplete="email" required /></div>
+          <div class="field"><label for="c-tel">Téléphone <span class="hint">(facultatif)</span></label><input id="c-tel" name="telephone" type="tel" autocomplete="tel" /></div>
+          <div class="field"><label for="c-msg">Message</label><textarea id="c-msg" name="message" rows="6" required></textarea></div>
+          <p class="hint">Vos données servent uniquement à répondre à votre message. <a href="/confidentialite/">En savoir plus</a>.</p>
+          <button class="btn" type="submit">Envoyer</button>
+        </form>
+      </div>
+      <div>
+        <h2>Coordonnées</h2>
+        <p><strong>{site.nomComplet}</strong></p>
+        <p><a href={`mailto:${site.email}`}>{site.email}</a></p>
+        {telephone && <p><a href={`tel:${telephone.replace(/\s/g, '')}`}>{telephone}</a></p>}
+        <h2>Nos gymnases</h2>
+        <Salles />
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .cols { display: grid; gap: var(--space-12); }
+  @media (min-width: 56rem) { .cols { grid-template-columns: 1fr 1fr; } }
+  .hint { color: var(--color-ink-muted); font-size: var(--text-sm); }
+</style>

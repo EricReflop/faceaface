@@ -1,0 +1,32 @@
+---
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import PageHeader from '../components/PageHeader.astro';
+import site from '../data/site.json';
+
+const fil = [{ name: 'Confidentialité', path: '/confidentialite/' }];
+---
+<Base title="Politique de confidentialité" description="Comment Face à Face, club de Muay Thaï à Reims, traite vos données personnelles : formulaires, durée de conservation et droits RGPD.">
+  <Breadcrumbs items={fil} />
+  <PageHeader titre="Politique de confidentialité" />
+  <section class="section">
+    <div class="container prose">
+      <!--
+        TODO : reprendre et mettre à jour le texte de l’ancienne page
+        /politique-de-protection-des-donnees/ (redirigée ici en 301).
+        Points à refléter : plus de Google Analytics à cookies, plus de reCAPTCHA,
+        formulaires traités par Netlify Forms, inscriptions via HelloAsso.
+      -->
+      <h2>Responsable du traitement</h2>
+      <p>Association FACE A FACE, contact : <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
+      <h2>Cookies</h2>
+      <p>Ce site ne dépose aucun cookie de mesure d’audience ni de publicité.</p>
+      <h2>Formulaires</h2>
+      <p>Les informations saisies dans les formulaires de contact et d’essai servent uniquement à vous répondre. [Durée de conservation à compléter.]</p>
+      <h2>Inscriptions</h2>
+      <p>Les inscriptions et paiements sont gérés par HelloAsso, qui dispose de sa propre politique de confidentialité.</p>
+      <h2>Vos droits</h2>
+      <p>Vous pouvez accéder à vos données, les rectifier ou demander leur suppression en écrivant à <a href={`mailto:${site.email}`}>{site.email}</a>. Vous pouvez aussi saisir la CNIL.</p>
+    </div>
+  </section>
+</Base>

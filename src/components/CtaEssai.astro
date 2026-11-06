@@ -1,0 +1,21 @@
+---
+interface Props { titre?: string; texte?: string }
+const {
+  titre = 'Envie d’essayer ?',
+  texte = 'Séances d’essai gratuites pour les enfants dès 5 ans, les ados et les adultes, sans expérience requise.',
+} = Astro.props;
+---
+<section class="section section--inverse" aria-labelledby="cta-essai">
+  <div class="container">
+    <h2 id="cta-essai">{titre}</h2>
+    <p class="lead cta-texte">{texte}</p>
+    <div class="actions">
+      <a class="btn" href="/cours-essai/">Réserver un essai gratuit</a>
+      <a class="btn btn--secondary" href="/cours-horaires/">Voir les horaires</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta-texte { color: inherit; }
+</style>
